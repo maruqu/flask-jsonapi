@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 import flask
 import pytest
 import sqlalchemy
@@ -6,6 +8,13 @@ from sqlalchemy.orm import sessionmaker
 
 
 TEST_DATABASE_URI = 'sqlite://'
+
+
+@contextmanager
+def request_with_user_id(app, user_id):
+    with app.test_request_context():
+        flask.request.user_id = user_id
+        yield
 
 
 @pytest.fixture
